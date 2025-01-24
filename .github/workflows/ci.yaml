@@ -1,0 +1,16 @@
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          dd if=/dev/zero of=$RUNNER_TEMP/testfile bs=2M count=1
+      - uses: ./.
+      - run: |
+          pwd
+          ls -lah
+          echo $RUNNER_TEMP
+          ls -lah $RUNNER_TEMP

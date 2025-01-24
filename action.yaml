@@ -1,0 +1,5 @@
+name: 'GitHub Actions Nix cache'
+description: 'Use GitHub Actions cache as Nix cache'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
