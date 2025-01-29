@@ -6,16 +6,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          dd if=/dev/zero of=$RUNNER_TEMP/testfile bs=2M count=1
       - uses: ./.
       - run: |
-         curl -vf http://127.0.0.1:8080/testfile
+          curl -v http://127.0.0.1:8080/testfile
       - run: |
-          pwd
-          ls -lah
-          echo $RUNNER_TEMP
-          ls -lah $RUNNER_TEMP
+          echo "Hi" > $RUNNER_TEMP/gha-nix-cache/upload/hello
+      - run: |
+          find $RUNNER_TEMP/gha-nix-cache -ls
       - if: always()
         run: |
           cat $RUNNER_TEMP/gha-nix-cache/stderr.log

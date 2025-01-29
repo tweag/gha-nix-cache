@@ -22,6 +22,7 @@ async function setup() {
   await fs.symlink(`${import.meta.dirname}/../tarshim.sh`, `${binDir}/tar`)
   process.env.PATH = binDir;
 
+  await io.mkdirP(`upload`);
   // Force cache to restore to cwd
   delete process.env["GITHUB_WORKSPACE"];
 }
@@ -78,8 +79,20 @@ async function handle(req, res) {
   }
 }
 
+function startServer() {
+  const server = http.createServer(handle);
+  server.listen(8080, () => {
+    process.send('started');
+  });
+}
+
+async function watchAndUpload() {
+  const wathcer = fs.watch(`upload`, {recursive: true});
+  for await (event of watcher) {
+    console.log(event);
+  }
+}
+
 await setup();
-const server = http.createServer(handle);
-server.listen(8080, () => {
-  process.send('started');
-});
+watchAndUpload();
+startServer();
