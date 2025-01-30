@@ -5,8 +5,9 @@ const http = await import('node:http');
 const io = await import('@actions/io');
 const process = await import('node:process');
 
-process.on('uncaughtException', (error) => {
+process.default.on('uncaughtException', (error) => {
 	console.error(error && error.stack ? error.stack : error);
+	// eslint-disable-next-line unicorn/no-process-exit
 	process.exit(1);
 });
 
