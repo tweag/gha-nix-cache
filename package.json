@@ -5,5 +5,22 @@
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
     "@actions/io": "^1.1.3"
+  },
+  "xo": {
+    "prettier": true,
+    "rules": {
+      "camelcase": ["error", {
+        "allow": ["child_process"]
+      }],
+      "no-multi-assign": ["error", {
+        "ignoreNonDeclaration": true
+      }],
+      "unicorn/prevent-abbreviations": ["error", {
+        "replacements": {
+          "bin": false,
+          "dir": false
+        }
+      }]
+    }
   }
 }
