@@ -28,7 +28,7 @@ rec {
         if ! docker inspect --format 'ok' "${image-tag}" > /dev/null 2>&1; then
           docker load --input ${act-image}
         fi
-        ${pkgs.lib.getExe pkgs.act} -P ubuntu-latest=${image-tag}
+        ${pkgs.lib.getExe pkgs.act} -P ubuntu-latest=${image-tag} "$@"
       '';
     };
   check = pkgs.writeShellApplication {
