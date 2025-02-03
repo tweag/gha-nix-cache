@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["../src/restore.js"],
+  "sourcesContent": [
+    "const cache = await import('@actions/cache');\nconst process = await import('node:process');\n\nconst name = process.env.TARGET_FILE_NAME;\nconst _cacheKey = await cache.restoreCache([name], name);\n"
+  ],
+  "mappings": "+CAAA,IAAM,EAAQ,KAAa,+BACrB,EAAU,KAAa,wBAEvB,EAAO,EAAQ,IAAI,iBACnB,EAAY,MAAM,EAAM,aAAa,CAAC,CAAI,EAAG,CAAI",
+  "debugId": "177D295A9BB2151464756E2164756E21",
+  "names": []
+}
