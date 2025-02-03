@@ -1,7 +1,7 @@
-const child_process = await import('node:child_process');
-const core = await import('@actions/core');
-const io = await import('@actions/io');
-const process = await import('node:process');
+import * as child_process from 'node:child_process';
+import * as core from '@actions/core';
+import * as io from '@actions/io';
+import * as process from 'node:process';
 
 process.default.on('uncaughtException', (error) => {
 	console.error(error && error.stack ? error.stack : error);

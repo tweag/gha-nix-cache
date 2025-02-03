@@ -31,6 +31,15 @@ rec {
         ${pkgs.lib.getExe pkgs.act} -P ubuntu-latest=${image-tag} "$@"
       '';
     };
+  build = pkgs.writeShellApplication {
+    name = "build";
+    runtimeInputs = [
+      pkgs.bun
+    ];
+    text = ''
+      bun build --install --target node --outdir=dist --minify --splitting --sourcemap src/*.js
+    '';
+  };
   check = pkgs.writeShellApplication {
     name = "check";
     runtimeInputs = [
@@ -65,6 +74,7 @@ rec {
       pkgs.nixfmt-rfc-style
 
       act
+      build
       check
       fmt
     ] ++ pkgs.lib.optional (pkgs.stdenv.isDarwin) pkgs.podman;

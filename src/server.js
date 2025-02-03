@@ -1,9 +1,9 @@
-const cache = await import('@actions/cache');
-const child_process = await import('node:child_process');
-const fs = await import('node:fs/promises');
-const http = await import('node:http');
-const io = await import('@actions/io');
-const process = await import('node:process');
+import * as cache from '@actions/cache';
+import * as child_process from 'node:child_process';
+import * as fs from 'node:fs/promises';
+import * as http from 'node:http';
+import * as io from '@actions/io';
+import * as process from 'node:process';
 
 process.default.on('uncaughtException', (error) => {
 	console.error(error && error.stack ? error.stack : error);

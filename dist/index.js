@@ -1,4 +1,41 @@
-import{g as n,i as r}from"./index-w1dbetra.js";var d=await import("node:child_process"),i=await import("./core-kjnjkt1z.js"),p=await import("./io-v21dydqq.js"),a=await import("node:process");a.default.on("uncaughtException",(e)=>{console.error(e&&e.stack?e.stack:e),i.error(e.message),i.setFailed(e.message)});i.info("Starting server...");var c=`${a.env.RUNNER_TEMP}/gha-nix-cache`;await p.mkdirP(c);var t=d.fork(`${import.meta.dirname}/server.js`,[],{cwd:c,detached:!0,stdio:["ipc","ignore","inherit"]});i.info("Waiting for server to start...");await new Promise((e,o)=>{t.on("exit",(s,m)=>{o(new Error(`Server process exited unexpectedly with code ${s}`))}),t.on("message",(s)=>{if(s==="started")e();else t.kill(),o(new Error(`Server process sent unexpected message: ${s}`))})});i.info("Server is listening.");t.unref();t.channel.unref();
+import {
+  __toESM,
+  require_core,
+  require_io
+} from "./index-p06xw57k.js";
 
-//# debugId=09372883E81101D364756E2164756E21
-//# sourceMappingURL=index.js.map
+// src/index.js
+var core = __toESM(require_core(), 1);
+var io = __toESM(require_io(), 1);
+import * as child_process from "node:child_process";
+import * as process from "node:process";
+process.default.on("uncaughtException", (error2) => {
+  console.error(error2 && error2.stack ? error2.stack : error2);
+  core.error(error2.message);
+  core.setFailed(error2.message);
+});
+core.info("Starting server...");
+var workDir = `${process.env.RUNNER_TEMP}/gha-nix-cache`;
+await io.mkdirP(workDir);
+var server = child_process.fork(`${import.meta.dirname}/server.js`, [], {
+  cwd: workDir,
+  detached: true,
+  stdio: ["ipc", "ignore", "inherit"]
+});
+core.info("Waiting for server to start...");
+await new Promise((resolve, reject) => {
+  server.on("exit", (code, _signal) => {
+    reject(new Error(`Server process exited unexpectedly with code ${code}`));
+  });
+  server.on("message", (message) => {
+    if (message === "started") {
+      resolve();
+    } else {
+      server.kill();
+      reject(new Error(`Server process sent unexpected message: ${message}`));
+    }
+  });
+});
+core.info("Server is listening.");
+server.unref();
+server.channel.unref();
