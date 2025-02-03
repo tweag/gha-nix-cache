@@ -1,0 +1,5 @@
+--remote-name github
+--action-offline-mode
+--pull=false
+--use-gitignore=false
+#-P ubuntu-latest=<generated in Nix>

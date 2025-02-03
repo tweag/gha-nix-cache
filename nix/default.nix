@@ -6,8 +6,31 @@
     overlays = [ ];
     config = { };
   },
+  linuxPkgs ?
+    if pkgs.stdenv.hostPlatform.isLinux then
+      pkgs
+    else
+      import npins.nixpkgs {
+        system = "${pkgs.stdenv.hostPlatform.uname.processor}-linux";
+        overlays = [ ];
+        config = { };
+      },
 }:
 rec {
+  act-image = linuxPkgs.callPackage ./act-image.nix { };
+  act =
+    let
+      image-tag = "${act-image.buildArgs.name}:${act-image.imageTag}";
+    in
+    pkgs.writeShellApplication {
+      name = "act";
+      text = ''
+        if ! docker inspect --format 'ok' "${image-tag}" > /dev/null 2>&1; then
+          docker load --input ${act-image}
+        fi
+        ${pkgs.lib.getExe pkgs.act} -P ubuntu-latest=${image-tag}
+      '';
+    };
   check = pkgs.writeShellApplication {
     name = "check";
     runtimeInputs = [
@@ -37,10 +60,13 @@ rec {
     packages = [
       pkgs.npins
       pkgs.bun
-      pkgs.act
       pkgs.actionlint
       pkgs.shellcheck
       pkgs.nixfmt-rfc-style
-    ];
+
+      act
+      check
+      fmt
+    ] ++ pkgs.lib.optional (pkgs.stdenv.isDarwin) pkgs.podman;
   };
 }

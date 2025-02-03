@@ -6,13 +6,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.
+
+      - if: ${{ env.ACT }}
+        uses: ./test
+
+      - if: ${{ !env.ACT }}
+        uses: ./.
+
+      - uses: actions/cache@v4
+        with:
+          key: testfile
+          path: package.json
       - run: |
           curl -v http://127.0.0.1:8080/testfile
       - run: |
-          echo "Hi" > $RUNNER_TEMP/gha-nix-cache/upload/hello
+          echo "Hi" > "$RUNNER_TEMP/gha-nix-cache/upload/hello"
       - run: |
-          find $RUNNER_TEMP/gha-nix-cache -ls
+          find "$RUNNER_TEMP/gha-nix-cache" -ls
       - if: always()
         run: |
-          cat $RUNNER_TEMP/gha-nix-cache/stderr.log
+          cat "$RUNNER_TEMP/gha-nix-cache/stderr.log"
